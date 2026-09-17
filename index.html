@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maison Kanty’s — Abidjan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MAISON KANTY'S — système visuel
+   ============================================================ */
+:root{
+  --color-black:#0d0d0d;
+  --color-cream:#f4f1ec;
+  --color-beige:#e4dccf;
+  --color-camel:#b08d5f;
+  --color-text-dark:#1a1a1a;
+  --color-text-light:#f4f1ec;
+  --color-muted:#8c8c8c;
+  --serif:"Cormorant Garamond","Playfair Display","Times New Roman",serif;
+  --sans:"Jost","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.25,.46,.45,.94);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:1rem;
+  line-height:1.6;
+  color:var(--color-text-dark);
+  background:var(--color-cream);
+  -webkit-font-smoothing:antialiased;
+}
+body.no-scroll{overflow:hidden}
+::selection{background:var(--color-camel);color:var(--color-cream)}
+img{display:block;max-width:100%}
+button{font-family:var(--sans);background:none;border:none;cursor:pointer;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid var(--color-camel);outline-offset:3px}
+
+/* Traitement image éditorial */
+.ph{filter:saturate(.72) contrast(.97) brightness(1.02)}
+
+/* ---------- Vues (accueil / catalogue) ---------- */
+.view{display:none}
+.view.active{display:block;animation:viewIn .55s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Éléments typographiques partagés ---------- */
+.label{
+  font-family:var(--sans);font-weight:500;font-size:.72rem;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--color-muted);
+}
+.section-title{
+  font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.2vw,2.2rem);
+  letter-spacing:-.01em;line-height:1.15;
+}
+.section{padding:clamp(80px,10vw,120px) 6vw}
+.section-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:24px;margin-bottom:clamp(40px,5vw,64px);
+}
+.section-head .stack{display:flex;flex-direction:column;gap:14px}
+
+/* CTA texte + flèche */
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--sans);font-weight:500;font-size:.78rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  padding-bottom:6px;position:relative;transition:color .35s var(--ease);
+}
+.cta::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:currentColor;opacity:.25;transition:opacity .35s var(--ease);
+}
+.cta .arr{transition:transform .35s var(--ease);font-weight:300}
+.cta:hover::after{opacity:1}
+.cta:hover .arr{transform:translateX(5px)}
+
+.back-link{
+  display:inline-flex;align-items:center;gap:10px;width:fit-content;
+  font-weight:500;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--color-muted);padding-bottom:6px;position:relative;
+  transition:color .35s var(--ease);
+}
+.back-link::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:currentColor;opacity:.25;transition:opacity .35s var(--ease);
+}
+.back-link .arr{transition:transform .35s var(--ease);font-weight:300}
+.back-link:hover{color:var(--color-text-dark)}
+.back-link:hover::after{opacity:1}
+.back-link:hover .arr{transform:translateX(-5px)}
+
+/* ============================================================
+   EFFET « DÉBORDEMENT » — halo flouté qui dépasse du cadre
+   ============================================================ */
+.g-stage,.p-frame{position:relative}
+.g-glow,.p-glow{
+  position:absolute;object-fit:cover;pointer-events:none;z-index:0;
+  filter:blur(46px) saturate(1.18) brightness(1.05);
+  opacity:.5;
+  transition:opacity .5s var(--ease);
+}
+.g-glow{left:-9%;top:-11%;width:118%;height:122%}
+.p-glow{left:-7%;top:-9%;width:114%;height:118%;opacity:.42;filter:blur(42px) saturate(1.15) brightness(1.04)}
+.p-frame{z-index:1}
+.g-frame{position:relative;z-index:1;width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .7s var(--ease)}
+.g-item:hover .g-frame{transform:scale(1.025)}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:fixed;inset:0 0 auto 0;z-index:60;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 4vw;height:76px;
+  color:var(--color-text-light);
+  background:transparent;border-bottom:1px solid transparent;
+  transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease),height .4s var(--ease);
+}
+.site-header.scrolled{
+  background:var(--color-cream);color:var(--color-text-dark);
+  border-bottom-color:rgba(13,13,13,.08);height:64px;
+}
+.header-nav{display:flex;gap:clamp(18px,2.5vw,36px);justify-self:start}
+.header-nav a{
+  font-size:.75rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  position:relative;padding:4px 0;transition:opacity .3s var(--ease);
+}
+.header-nav a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:currentColor;transition:width .35s var(--ease);
+}
+.header-nav a:hover::after{width:100%}
+.logo{
+  font-family:var(--serif);font-weight:400;font-size:1.3rem;
+  letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
+}
+.header-actions{display:flex;gap:6px;justify-self:end;align-items:center}
+.icon-btn{
+  position:relative;width:40px;height:40px;display:grid;place-items:center;
+  transition:opacity .3s var(--ease);
+}
+.icon-btn:hover{opacity:.6}
+.icon-btn svg{width:19px;height:19px}
+.badge{
+  position:absolute;top:3px;right:1px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:50%;background:var(--color-camel);color:var(--color-cream);
+  font-size:9px;font-weight:500;display:grid;place-items:center;
+  transform:scale(1);transition:transform .3s var(--ease),opacity .3s var(--ease);
+}
+.badge.empty{transform:scale(0);opacity:0}
+.burger{display:none;width:40px;height:40px;place-items:center;flex-direction:column;gap:6px}
+.burger span{display:block;width:20px;height:1px;background:currentColor;transition:transform .3s var(--ease)}
+
+/* ============================================================
+   HERO — vidéo herok.mp4 + film génératif en secours
+   ============================================================ */
+.hero{
+  position:relative;height:100vh;height:100svh;min-height:620px;
+  background:var(--color-black);overflow:hidden;
+  display:grid;place-items:center;color:var(--color-text-light);
+}
+#drapeCanvas{position:absolute;inset:0;width:100%;height:100%}
+#heroVideo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.6s ease;
+}
+#heroVideo.on{opacity:.8}
+.hero-veil{position:absolute;inset:0;background:rgba(13,13,13,.22)}
+.hero-content{
+  position:relative;z-index:2;text-align:center;
+  padding:0 6vw;display:flex;flex-direction:column;align-items:center;gap:26px;
+}
+.hero-eyebrow{color:rgba(244,241,236,.65)}
+.hero-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2.8rem,7.5vw,6.4rem);
+  letter-spacing:-.015em;line-height:1.02;text-transform:uppercase;
+}
+.hero-rule{width:52px;height:1px;background:rgba(244,241,236,.4)}
+.hero-link{display:inline-flex;flex-direction:column;align-items:center;gap:12px;color:var(--color-text-light)}
+.hero-link .hc{
+  font-weight:400;font-size:.82rem;letter-spacing:.32em;text-transform:uppercase;
+  position:relative;padding-bottom:7px;
+}
+.hero-link .hc::after{
+  content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:38px;height:1px;background:rgba(244,241,236,.5);
+  transition:width .4s var(--ease),background .4s var(--ease);
+}
+.hero-link .hc .arr{display:inline-block;margin-left:8px;transition:transform .4s var(--ease)}
+.hero-link:hover .hc::after{width:100%;background:var(--color-camel)}
+.hero-link:hover .hc .arr{transform:translateX(6px)}
+.hero-baseline{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(1rem,1.5vw,1.15rem);color:rgba(244,241,236,.72);letter-spacing:.02em;
+}
+.hero-corner{
+  position:absolute;z-index:2;bottom:34px;
+  font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(244,241,236,.45);
+}
+.hero-corner.left{left:4vw}
+.hero-corner.right{right:4vw}
+.scroll-line{
+  position:absolute;z-index:2;bottom:0;left:50%;width:1px;height:64px;
+  background:rgba(244,241,236,.18);overflow:hidden;
+}
+.scroll-line::after{
+  content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;
+  background:var(--color-camel);animation:slide 2.6s var(--ease) infinite;
+}
+@keyframes slide{0%{top:-40%}60%,100%{top:110%}}
+
+/* ============================================================
+   BANDEAU DÉFILANT
+   ============================================================ */
+.marquee{
+  background:var(--color-beige);overflow:hidden;padding:15px 0;
+  border-top:1px solid rgba(13,13,13,.05);
+}
+.marquee-track{display:flex;width:max-content;animation:marquee 48s linear infinite}
+.marquee-group{display:flex;align-items:center;gap:56px;padding-right:56px}
+.marquee-group span{
+  font-size:.68rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--color-muted);white-space:nowrap;
+}
+.marquee-group i{width:4px;height:4px;background:var(--color-camel);transform:rotate(45deg);flex-shrink:0}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   CATÉGORIES — 3 vignettes (Robes / Costumes / Collection)
+   ============================================================ */
+#categories{background:var(--color-cream)}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px)}
+.cat-card{display:block;text-align:left}
+.cat-card figure{overflow:hidden;position:relative}
+.cat-card img{
+  width:100%;aspect-ratio:4/5;object-fit:cover;
+  transition:transform .7s var(--ease);
+}
+.cat-card:hover img{transform:scale(1.04)}
+.cat-caption{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px}
+.cat-caption .name{font-size:.78rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase}
+.cat-caption .go{
+  font-size:.9rem;opacity:0;transform:translateX(-6px);
+  transition:opacity .35s var(--ease),transform .35s var(--ease);color:var(--color-camel);
+}
+.cat-card:hover .go{opacity:1;transform:translateX(0)}
+.cat-count{display:block;margin-top:5px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted)}
+
+/* ============================================================
+   À PROPOS — LA MAISON
+   ============================================================ */
+#maison{background:var(--color-beige)}
+.maison-grid{display:grid;grid-template-columns:45% 55%;gap:clamp(40px,6vw,90px);align-items:center}
+.maison-photo{position:relative}
+.maison-photo img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.maison-photo figcaption{margin-top:14px}
+.maison-text{max-width:520px;display:flex;flex-direction:column;gap:28px}
+.maison-manifesto{display:flex;flex-direction:column}
+.manifesto-line{padding:22px 0;border-top:1px solid rgba(13,13,13,.12);display:flex;gap:28px;align-items:baseline}
+.manifesto-line:last-of-type{border-bottom:1px solid rgba(13,13,13,.12)}
+.manifesto-line strong{
+  font-family:var(--serif);font-weight:400;font-size:1.35rem;letter-spacing:-.01em;
+  min-width:130px;flex-shrink:0;
+}
+.manifesto-line p{font-size:.92rem;color:#3d3a35}
+
+/* ============================================================
+   GALERIE — TROIS PHOTOS, COULEURS QUI DÉBORDENT
+   ============================================================ */
+#galerie{background:var(--color-cream)}
+.g-note{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted);text-align:right}
+.g-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(40px,4vw,64px)}
+.g-item{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
+}
+.g-item.visible{opacity:1;transform:none}
+.g-cap{
+  display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  margin-top:22px;position:relative;z-index:2;
+}
+.g-cap .num{font-size:.68rem;letter-spacing:.24em;color:var(--color-camel);flex-shrink:0}
+.g-cap .txt{
+  font-size:.68rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--color-muted);text-align:right;
+}
+
+/* ============================================================
+   PAGE CATALOGUE — SS26 (vue détachée)
+   ============================================================ */
+.catalog-head{
+  padding:clamp(130px,18vh,190px) 6vw clamp(36px,5vw,56px);
+  display:flex;flex-direction:column;gap:20px;
+}
+.catalog-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2.8rem,6vw,4.8rem);
+  letter-spacing:-.015em;line-height:1;
+}
+.catalog-title em{font-style:italic;color:var(--color-camel)}
+.catalog-intro{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:1.08rem;color:#3d3a35;max-width:520px;
+}
+.catalog-bar{
+  margin-top:18px;padding:18px 0;
+  border-top:1px solid rgba(13,13,13,.1);
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.filters{display:flex;gap:clamp(16px,2.4vw,32px);flex-wrap:wrap;align-items:baseline}
+.filter-btn{
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--color-muted);padding:6px 0;position:relative;
+  transition:color .3s var(--ease);
+}
+.filter-btn::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--color-camel);transition:width .35s var(--ease);
+}
+.filter-btn:hover{color:var(--color-text-dark)}
+.filter-btn.active{color:var(--color-text-dark)}
+.filter-btn.active::after{width:100%}
+.pieces-count{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--color-muted)}
+
+.catalog-wrap{padding:0 6vw clamp(80px,10vw,120px)}
+#productList{display:flex;flex-direction:column}
+.product{
+  display:grid;grid-template-columns:55fr 45fr;gap:clamp(36px,5vw,72px);
+  align-items:center;padding:clamp(56px,7vw,88px) 0;
+  border-top:1px solid rgba(13,13,13,.08);
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
+}
+.product.visible{opacity:1;transform:translateY(0)}
+.product:first-child{border-top:none;padding-top:0}
+.product.flip .p-carousel{order:2}
+.product.flip .p-info{order:1}
+.product.hidden{display:none}
+.product.flash{animation:flash 1.8s var(--ease)}
+@keyframes flash{0%{background:rgba(176,141,95,.12)}100%{background:transparent}}
+
+/* Carrousel produit — halo flouté + photos */
+.p-carousel{position:relative}
+.p-track{display:flex;overflow:hidden}
+.p-slide{min-width:100%}
+.p-slide img{width:100%;aspect-ratio:3/4;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.c-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(13,13,13,.18);background:rgba(244,241,236,.92);
+  display:grid;place-items:center;
+  transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
+}
+.c-btn svg{width:16px;height:16px}
+.c-prev{left:18px}
+.c-next{right:18px}
+.c-btn:hover{background:var(--color-black);color:var(--color-cream);border-color:var(--color-black)}
+.c-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;position:relative;z-index:2}
+.c-count{font-size:.7rem;letter-spacing:.22em;color:var(--color-muted)}
+.c-dots{display:flex;gap:8px}
+.c-dot{width:16px;height:1px;background:rgba(13,13,13,.22);transition:background .3s var(--ease),width .3s var(--ease)}
+.c-dot.on{background:var(--color-black);width:26px}
+
+/* Informations produit */
+.p-info{max-width:460px;display:flex;flex-direction:column;gap:18px}
+.p-name{
+  font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,2.6vw,2.2rem);
+  letter-spacing:-.01em;line-height:1.1;
+}
+.p-price{font-size:.85rem;font-weight:400;letter-spacing:.14em;color:#3d3a35}
+.p-desc{font-size:.94rem;color:#3d3a35}
+.p-details{list-style:none;display:flex;flex-wrap:wrap;gap:6px 0}
+.p-details li{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-muted)}
+.p-details li:not(:last-child)::after{content:"·";margin:0 10px;color:var(--color-camel)}
+.p-sizes{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.sizes-row{display:flex;gap:10px;flex-wrap:wrap}
+.size-btn{
+  min-width:42px;height:42px;padding:0 12px;
+  border:1px solid rgba(13,13,13,.18);
+  font-size:.76rem;letter-spacing:.08em;font-weight:400;
+  transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease);
+}
+.size-btn:hover{border-color:var(--color-black)}
+.size-btn.active{background:var(--color-black);color:var(--color-cream);border-color:var(--color-black)}
+.p-actions{display:flex;gap:14px;align-items:stretch;margin-top:8px}
+.add-btn{
+  flex:1;height:52px;background:var(--color-black);color:var(--color-cream);
+  font-size:.75rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  transition:background .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease);
+}
+.add-btn .arr{transition:transform .35s var(--ease)}
+.add-btn:hover{background:transparent;color:var(--color-black);box-shadow:inset 0 0 0 1px var(--color-black)}
+.add-btn:hover .arr{transform:translateX(5px)}
+.fav-btn{
+  width:52px;height:52px;border:1px solid rgba(13,13,13,.18);
+  display:grid;place-items:center;color:var(--color-text-dark);
+  transition:border-color .35s var(--ease),color .35s var(--ease);
+}
+.fav-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.2;transition:fill .3s var(--ease)}
+.fav-btn.active{border-color:var(--color-camel);color:var(--color-camel)}
+.fav-btn.active svg{fill:var(--color-camel)}
+.catalog-empty{
+  display:none;padding:64px 0;text-align:center;
+  font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--color-muted);
+}
+.catalog-empty.on{display:block}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--color-black);color:var(--color-text-light);
+  padding:clamp(64px,8vw,96px) 6vw 0;
+}
+.footer-grid{
+  display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:clamp(40px,6vw,90px);
+  padding-bottom:clamp(48px,6vw,72px);
+}
+.footer-col .label{color:rgba(244,241,236,.45);display:block;margin-bottom:24px}
+.footer-links{display:flex;flex-direction:column;gap:14px}
+.footer-links a,.footer-links button{
+  font-size:.85rem;font-weight:300;letter-spacing:.06em;text-align:left;
+  color:rgba(244,241,236,.85);width:fit-content;position:relative;
+  transition:color .3s var(--ease);
+}
+.footer-links a::after,.footer-links button::after{
+  content:"";position:absolute;left:0;bottom:-2px;height:1px;width:0;
+  background:var(--color-camel);transition:width .35s var(--ease);
+}
+.footer-links a:hover,.footer-links button:hover{color:var(--color-cream)}
+.footer-links a:hover::after,.footer-links button:hover::after{width:100%}
+.footer-links .ext{font-size:.75em;color:var(--color-camel);margin-left:6px}
+.news-text{
+  font-family:var(--serif);font-style:italic;font-size:1.15rem;font-weight:300;
+  color:rgba(244,241,236,.85);margin-bottom:26px;line-height:1.5;
+}
+.news-form{display:flex;align-items:flex-end;border-bottom:1px solid rgba(244,241,236,.3);transition:border-color .35s var(--ease)}
+.news-form:focus-within{border-color:var(--color-cream)}
+.news-form input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:var(--sans);font-weight:300;font-size:.9rem;letter-spacing:.04em;
+  color:var(--color-cream);padding:12px 0;
+}
+.news-form input::placeholder{color:rgba(244,241,236,.4)}
+.news-form button{padding:12px 4px;font-size:1rem;color:rgba(244,241,236,.7);transition:color .3s var(--ease),transform .3s var(--ease)}
+.news-form button:hover{color:var(--color-camel);transform:translateX(4px)}
+.news-msg{margin-top:14px;font-size:.78rem;letter-spacing:.08em;font-style:italic;color:var(--color-camel);min-height:1.2em}
+.footer-brand{
+  font-family:var(--serif);font-size:1.6rem;font-weight:400;letter-spacing:-.01em;
+  text-transform:uppercase;line-height:1.3;margin-bottom:20px;
+}
+.footer-brand small{
+  display:block;font-family:var(--sans);font-size:.68rem;font-weight:300;
+  letter-spacing:.3em;color:rgba(244,241,236,.45);margin-top:10px;
+}
+.footer-bottom{
+  border-top:1px solid rgba(244,241,236,.12);
+  padding:24px 0 28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,236,.4);
+}
+.footer-bottom button{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,236,.4);transition:color .3s var(--ease)}
+.footer-bottom button:hover{color:var(--color-cream)}
+
+/* ============================================================
+   PANIER — tiroir latéral
+   ============================================================ */
+.cart-overlay,.search-overlay,.modal-overlay{
+  position:fixed;inset:0;background:rgba(13,13,13,.45);
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease);
+}
+.cart-overlay.open,.search-overlay.open,.modal-overlay.open{opacity:1;visibility:visible}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);z-index:90;
+  background:var(--color-cream);display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .45s var(--ease);
+}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:26px 30px;border-bottom:1px solid rgba(13,13,13,.1);
+}
+.cart-head h2{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em}
+.overlay-close{width:40px;height:40px;display:grid;place-items:center;transition:opacity .3s var(--ease)}
+.overlay-close:hover{opacity:.5}
+.overlay-close svg{width:18px;height:18px}
+.cart-body{flex:1;overflow-y:auto;padding:10px 30px}
+.cart-empty{padding:56px 0;text-align:center;display:flex;flex-direction:column;gap:20px;align-items:center}
+.cart-empty p{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--color-muted)}
+.cart-item{display:flex;gap:18px;padding:24px 0;border-bottom:1px solid rgba(13,13,13,.08)}
+.cart-item img{width:72px;height:92px;object-fit:cover;flex-shrink:0}
+.ci-body{flex:1;display:flex;flex-direction:column;gap:4px}
+.ci-body h4{font-family:var(--serif);font-weight:400;font-size:1.05rem;letter-spacing:-.01em}
+.ci-meta{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--color-muted)}
+.ci-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.qty{display:flex;align-items:center;gap:14px;border:1px solid rgba(13,13,13,.15);padding:4px 10px}
+.qty button{font-size:.95rem;width:18px;height:22px;transition:color .3s var(--ease)}
+.qty button:hover{color:var(--color-camel)}
+.qty span{font-size:.8rem;min-width:14px;text-align:center}
+.ci-price{font-size:.8rem;letter-spacing:.08em}
+.ci-remove{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--color-muted);width:fit-content;margin-top:6px;transition:color .3s var(--ease)}
+.ci-remove:hover{color:var(--color-black)}
+.cart-foot{padding:24px 30px 30px;border-top:1px solid rgba(13,13,13,.1)}
+.cart-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.cart-total strong{font-family:var(--serif);font-weight:400;font-size:1.25rem}
+.cart-note{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-muted);margin-bottom:18px}
+.checkout-btn{
+  width:100%;height:54px;background:var(--color-black);color:var(--color-cream);
+  font-size:.75rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+  transition:background .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease);
+}
+.checkout-btn:hover{background:transparent;color:var(--color-black);box-shadow:inset 0 0 0 1px var(--color-black)}
+.cart-demo{margin-top:12px;text-align:center;font-size:.66rem;letter-spacing:.1em;color:var(--color-muted)}
+.cart-confirm{padding:56px 0;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
+.cart-confirm h3{font-family:var(--serif);font-weight:400;font-size:1.7rem}
+.cart-confirm p{font-size:.9rem;color:#3d3a35;max-width:300px}
+.cart-confirm .ref{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-camel)}
+
+/* ============================================================
+   MENU MOBILE / RECHERCHE / MODAL / TOAST
+   ============================================================ */
+.mobile-menu{
+  position:fixed;inset:0;z-index:70;background:var(--color-black);color:var(--color-text-light);
+  display:flex;flex-direction:column;padding:26px 6vw 40px;
+  transform:translateY(-100%);transition:transform .5s var(--ease);
+}
+.mobile-menu.open{transform:translateY(0)}
+.mm-head{display:flex;justify-content:space-between;align-items:center}
+.mm-links{flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.mm-links a{
+  font-family:var(--serif);font-weight:300;font-size:2.1rem;letter-spacing:-.01em;
+  padding:10px 0;border-bottom:1px solid rgba(244,241,236,.1);width:100%;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:color .3s var(--ease),padding-left .3s var(--ease);
+}
+.mm-links a span{font-family:var(--sans);font-size:.65rem;letter-spacing:.3em;color:var(--color-camel)}
+.mm-links a:hover{color:var(--color-camel);padding-left:8px}
+.mm-foot{font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(244,241,236,.4)}
+
+.search-overlay{
+  position:fixed;inset:0;z-index:80;background:rgba(244,241,236,.985);color:var(--color-text-dark);
+  display:flex;flex-direction:column;align-items:center;padding:90px 6vw 40px;
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease);
+}
+.search-overlay.open{opacity:1;visibility:visible}
+.search-overlay .overlay-close{position:absolute;top:20px;right:4vw}
+.search-inner{width:min(680px,100%)}
+#searchInput{
+  width:100%;background:transparent;border:none;outline:none;
+  font-family:var(--serif);font-weight:300;font-size:clamp(1.6rem,4vw,2.4rem);
+  color:var(--color-text-dark);padding:14px 0;border-bottom:1px solid rgba(13,13,13,.25);
+  transition:border-color .35s var(--ease);
+}
+#searchInput:focus{border-color:var(--color-black)}
+#searchInput::placeholder{color:rgba(13,13,13,.3)}
+.search-results{margin-top:8px;max-height:52vh;overflow-y:auto}
+.search-hit{
+  width:100%;display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:20px 4px;border-bottom:1px solid rgba(13,13,13,.08);text-align:left;
+  transition:background .3s var(--ease),padding-left .3s var(--ease);
+}
+.search-hit:hover{background:var(--color-beige);padding-left:12px}
+.search-hit .sh-name{font-family:var(--serif);font-weight:400;font-size:1.2rem;letter-spacing:-.01em}
+.search-hit .sh-cat{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted)}
+.search-hit .sh-price{font-size:.78rem;letter-spacing:.08em;color:#3d3a35;white-space:nowrap}
+.search-none{padding:28px 4px;font-family:var(--serif);font-style:italic;color:var(--color-muted)}
+
+.modal-overlay{position:fixed;inset:0;z-index:84;background:rgba(13,13,13,.45);
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease)}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal-box{
+  position:fixed;z-index:85;top:50%;left:50%;transform:translate(-50%,-48%);
+  width:min(580px,92vw);max-height:82vh;overflow-y:auto;
+  background:var(--color-cream);padding:clamp(36px,5vw,56px);
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),transform .4s var(--ease),visibility .4s;
+}
+.modal-box.open{opacity:1;visibility:visible;transform:translate(-50%,-50%)}
+.modal-box h3{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin:10px 0 22px}
+.modal-box .body{font-size:.92rem;color:#3d3a35;display:flex;flex-direction:column;gap:14px}
+.modal-box .body p{line-height:1.65}
+.modal-box table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.82rem}
+.modal-box th{font-weight:500;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted);text-align:left;padding:10px 8px;border-bottom:1px solid rgba(13,13,13,.2)}
+.modal-box td{padding:10px 8px;border-bottom:1px solid rgba(13,13,13,.08)}
+.modal-box .overlay-close{position:absolute;top:14px;right:14px}
+
+.toast{
+  position:fixed;z-index:100;bottom:32px;left:50%;
+  transform:translate(-50%,16px);opacity:0;pointer-events:none;
+  background:var(--color-black);color:var(--color-cream);
+  padding:15px 30px;font-size:.72rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;
+  transition:opacity .4s var(--ease),transform .4s var(--ease);
+  display:flex;align-items:center;gap:12px;white-space:nowrap;max-width:92vw;
+}
+.toast::before{content:"";width:4px;height:4px;background:var(--color-camel);transform:rotate(45deg);flex-shrink:0}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1100px){
+  .maison-grid{grid-template-columns:1fr;gap:48px}
+  .maison-photo{max-width:560px}
+  .product{grid-template-columns:1fr;gap:40px}
+  .product.flip .p-carousel{order:0}
+  .product.flip .p-info{order:1}
+  .p-info{max-width:560px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .g-grid{grid-template-columns:repeat(3,1fr);gap:24px}
+}
+@media (max-width:900px){
+  .header-nav{display:none}
+  .burger{display:grid}
+  .section-head{flex-direction:column;align-items:flex-start;gap:20px}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-corner{display:none}
+  .cat-grid{grid-template-columns:1fr 1fr}
+  .g-grid{grid-template-columns:1fr;max-width:520px;gap:48px}
+  .g-note{text-align:left}
+}
+@media (max-width:520px){
+  .site-header{padding:0 5vw}
+  .logo{font-size:1.05rem}
+  .c-btn{width:38px;height:38px}
+  .manifesto-line{flex-direction:column;gap:6px}
+  .p-actions{flex-wrap:wrap}
+  .toast{font-size:.64rem;padding:13px 20px}
+  .g-glow{left:-6%;top:-8%;width:112%;height:116%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="site-header" id="siteHeader">
+  <button class="burger" id="burgerBtn" aria-label="Ouvrir le menu">
+    <span></span><span></span>
+  </button>
+  <nav class="header-nav" aria-label="Navigation principale">
+    <a href="#" data-nav="catalog">Catalogue SS26</a>
+    <a href="#" data-section="#categories">Catégories</a>
+    <a href="#" data-section="#maison">La Maison</a>
+    <a href="#" data-section="#galerie">Galerie</a>
+  </nav>
+  <a class="logo" href="#" data-nav="home">Maison Kanty’s</a>
+  <div class="header-actions">
+    <button class="icon-btn" id="searchBtn" aria-label="Rechercher">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="6.2"/><path d="M20.2 20.2 15.6 15.6"/></svg>
+    </button>
+    <button class="icon-btn" id="favHeaderBtn" aria-label="Mes favoris">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 20.3C7.4 16.9 3 13.4 3 9.3 3 6.4 5.2 4.5 7.6 4.5c1.8 0 3.4 1 4.4 2.6 1-1.6 2.6-2.6 4.4-2.6 2.4 0 4.6 1.9 4.6 4.8 0 4.1-4.4 7.6-9 11z"/></svg>
+      <span class="badge empty" id="favCount">0</span>
+    </button>
+    <button class="icon-btn" id="cartBtn" aria-label="Panier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5.8 8.2h12.4l1 12.3H4.8l1-12.3z"/><path d="M9 8V6.4A3 3 0 0 1 12 3.5a3 3 0 0 1 3 2.9V8"/></svg>
+      <span class="badge empty" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     VUE 1 — ACCUEIL
+     ═══════════════════════════════════════════ -->
+<div class="view active" id="view-home">
+
+  <!-- HERO — vidéo herok.mp4 -->
+  <section class="hero" id="hero">
+    <canvas id="drapeCanvas" aria-hidden="true"></canvas>
+    <video id="heroVideo" src="herok.mp4" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <span class="label hero-eyebrow">Grande Maison — Abidjan</span>
+      <h1 class="hero-title">Maison Kanty’s</h1>
+      <div class="hero-rule" aria-hidden="true"></div>
+      <a class="hero-link" href="#" id="heroCollectionLink">
+        <span class="hc">New Collection — SS26 <span class="arr">→</span></span>
+      </a>
+      <p class="hero-baseline">Élégance intemporelle, conçue à Abidjan.</p>
+    </div>
+
+    <span class="hero-corner left">05°18′ N — 03°59′ O</span>
+    <span class="hero-corner right">Printemps–Été 2026</span>
+    <div class="scroll-line" aria-hidden="true"></div>
+  </section>
+
+  <!-- BANDEAU -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- CATÉGORIES -->
+  <section class="section" id="categories">
+    <div class="section-head">
+      <div class="stack">
+        <span class="label">Les univers</span>
+        <h2 class="section-title">Catégories</h2>
+      </div>
+      <a class="cta" href="#" id="seeAllBtn">Tout voir <span class="arr">→</span></a>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <!-- À PROPOS -->
+  <section class="section" id="maison">
+    <div class="maison-grid">
+      <figure class="maison-photo">
+        <img class="ph" src="pv1.png" alt="Séance éditoriale — Maison Kanty’s, atelier de Cocody" onerror="this.style.background='var(--color-beige)';this.style.minHeight='400px'">
+        <figcaption class="label">Atelier de Cocody — façonné main</figcaption>
+      </figure>
+      <div class="maison-text">
+        <span class="label">La Maison</span>
+        <h2 class="section-title">Minimalisme. Savoir-faire. Héritage.</h2>
+        <div class="maison-manifesto">
+          <div class="manifesto-line">
+            <strong>Minimalisme</strong>
+            <p>Des lignes nettes, des matières nobles, aucun ornement superflu. L’essentiel suffit.</p>
+          </div>
+          <div class="manifesto-line">
+            <strong>Savoir-faire</strong>
+            <p>Chaque pièce est façonnée à la main dans notre atelier d’Abidjan, à hauteur d’homme.</p>
+          </div>
+          <div class="manifesto-line">
+            <strong>Héritage</strong>
+            <p>Les gestes du tissage ouest-africain, transmis d’un atelier à l’autre, portés plus loin.</p>
+          </div>
+        </div>
+        <button class="cta" data-info="histoire">Notre histoire <span class="arr">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIE — 3 PHOTOS AU-DESSUS DU FOOTER, COULEURS QUI DÉBORDENT -->
+  <section class="section" id="galerie">
+    <div class="section-head">
+      <div class="stack">
+        <span class="label">Journal</span>
+        <h2 class="section-title">La collection en trois images</h2>
+      </div>
+      <div class="stack">
+        <span class="g-note">Abidjan, chaque saison</span>
+        <button class="cta" data-info="contact">Rendez-vous en atelier <span class="arr">→</span></button>
+      </div>
+    </div>
+    <div class="g-grid">
+      <figure class="g-item">
+        <span class="g-stage">
+          <img class="g-glow" src="pv1.png" alt="" aria-hidden="true">
+          <img class="g-frame ph" src="pv1.png" alt="Silhouette SS26 — première image">
+        </span>
+        <figcaption class="g-cap">
+          <span class="num">01</span>
+          <span class="txt">Silhouette SS26</span>
+        </figcaption>
+      </figure>
+      <figure class="g-item">
+        <span class="g-stage">
+          <img class="g-glow" src="pv2.png" alt="" aria-hidden="true">
+          <img class="g-frame ph" src="pv2.png" alt="Détail de drapé — deuxième image">
+        </span>
+        <figcaption class="g-cap">
+          <span class="num">02</span>
+          <span class="txt">Détail de drapé</span>
+        </figcaption>
+      </figure>
+      <figure class="g-item">
+        <span class="g-stage">
+          <img class="g-glow" src="pv3.png" alt="" aria-hidden="true">
+          <img class="g-frame ph" src="pv3.png" alt="Lumière d’atelier — troisième image">
+        </span>
+        <figcaption class="g-cap">
+          <span class="num">03</span>
+          <span class="txt">Lumière d’atelier</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+</div><!-- /view-home -->
+
+<!-- ═══════════════════════════════════════════
+     VUE 2 — CATALOGUE SS26 (page détachée)
+     ═══════════════════════════════════════════ -->
+<section class="view" id="view-catalog">
+  <div class="catalog-head">
+    <button class="back-link" id="backHome"><span class="arr">←</span> Accueil</button>
+    <span class="label">Nouvelle collection — Spring–Summer 2026</span>
+    <h1 class="catalog-title">Catalogue <em>SS26</em></h1>
+    <p class="catalog-intro">Six pièces, façonnées à la main dans l’atelier de Cocody. Chaque matière est choisie pour traverser les saisons.</p>
+    <div class="catalog-bar">
+      <div class="filters" id="filters"></div>
+      <span class="pieces-count" id="piecesCount">06 pièces</span>
+    </div>
+  </div>
+
+  <div class="catalog-wrap">
+    <div id="productList"></div>
+    <p class="catalog-empty" id="catalogEmpty">Aucune pièce ne correspond — l’atelier travaille déjà sur la suite.</p>
+  </div>
+</section><!-- /view-catalog -->
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <span class="label">Service</span>
+      <div class="footer-links">
+        <button data-info="livraison">Livraison</button>
+        <button data-info="retours">Retours</button>
+        <button data-info="tailles">Guide des tailles</button>
+        <button data-info="contact">Contact</button>
+      </div>
+    </div>
+    <div class="footer-col">
+      <p class="footer-brand">Maison Kanty’s<small>Cocody — Abidjan, Côte d’Ivoire</small></p>
+    </div>
+    <div class="footer-col">
+      <span class="label">Suivre</span>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/maisonkantys" target="_blank" rel="noopener">Instagram<span class="ext">↗</span></a>
+        <a href="https://www.pinterest.com/maisonkantys" target="_blank" rel="noopener">Pinterest<span class="ext">↗</span></a>
+        <a href="https://www.tiktok.com/@maisonkantys" target="_blank" rel="noopener">TikTok<span class="ext">↗</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-col" style="padding-bottom:clamp(48px,6vw,72px)">
+    <span class="label">Recevoir les nouvelles</span>
+    <p class="news-text">Une lettre par saison. Les pièces en édition limitée, avant tout le monde.</p>
+    <form class="news-form" id="newsForm" novalidate>
+      <input type="email" id="newsEmail" placeholder="Votre adresse e-mail" aria-label="Adresse e-mail">
+      <button type="submit" aria-label="S’inscrire">→</button>
+    </form>
+    <p class="news-msg" id="newsMsg"></p>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Maison Kanty’s — Abidjan</span>
+    <button data-info="legal">Mentions légales</button>
+  </div>
+</footer>
+
+<!-- ══════════════ PANIER ══════════════ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Panier">
+  <div class="cart-head">
+    <h2>Panier</h2>
+    <button class="overlay-close" id="cartClose" aria-label="Fermer le panier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-foot" id="cartFoot">
+    <div class="cart-total"><span class="label">Total</span><strong id="cartTotal">0 FCFA</strong></div>
+    <p class="cart-note">Livraison offerte à Abidjan</p>
+    <button class="checkout-btn" id="checkoutBtn">Commander</button>
+    <p class="cart-demo">Site de démonstration — aucune commande réelle</p>
+  </div>
+</aside>
+
+<!-- ══════════════ MENU MOBILE ══════════════ -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-head">
+    <span class="logo">Maison Kanty’s</span>
+    <button class="overlay-close" id="menuClose" aria-label="Fermer le menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </button>
+  </div>
+  <nav class="mm-links">
+    <a href="#" data-nav="home">Accueil<span>01</span></a>
+    <a href="#" data-nav="catalog">Catalogue SS26<span>02</span></a>
+    <a href="#" data-section="#categories">Catégories<span>03</span></a>
+    <a href="#" data-section="#maison">La Maison<span>04</span></a>
+    <a href="#" data-section="#galerie">Galerie<span>05</span></a>
+    <a href="#" data-section="#contact">Contact<span>06</span></a>
+  </nav>
+  <p class="mm-foot">Cocody — Abidjan, Côte d’Ivoire</p>
+</div>
+
+<!-- ══════════════ RECHERCHE ══════════════ -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="overlay-close" id="searchClose" aria-label="Fermer la recherche">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5 5 19"/></svg>
+  </button>
+  <div class="search-inner">
+    <span class="label">Rechercher une pièce</span>
+    <input type="text" id="searchInput" placeholder="Robe, costume…" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL INFORMATION ══════════════ -->
+<div class="modal-overlay" id="modalOverlay"></div>
+<div class="modal-box" id="modalBox" role="dialog" aria-modal="true">
+  <button class="overlay-close" id="modalClose" aria-label="Fermer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5 5 19"/></svg>
+  </button>
+  <span class="label" id="modalLabel">Information</span>
+  <h3 id="modalTitle"></h3>
+  <div class="body" id="modalBody"></div>
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   DONNÉES — vos fichiers images locaux
+   ════════════════════════════════════════════ */
+const PRODUCTS = [
+  { id:'robe-bordeaux', name:'Robe Bordeaux', cat:'Robes', price:245000,
+    desc:'Bordeaux profond, presque noir selon la lumière. Coupe fluide, drapé noué à la taille, ourlet passé main.',
+    details:['Coton-satin','Drapé noué','Ourlet main'],
+    sizes:[34,36,38,40,42],
+    images:['bord1.png'] },
+  { id:'robe-blanche', name:'Robe Blanche', cat:'Robes', price:265000,
+    desc:'Écru cassé, épaules ouvertes, volume net. La pièce la plus simple de la collection — et la plus exigeante à couper.',
+    details:['Écru','Épaules ouvertes','Doublure coton'],
+    sizes:[34,36,38,40,42],
+    images:['bl1.png','bl2.png'] },
+  { id:'robe-blanche-longue', name:'Robe Blanche Longue', cat:'Robes', price:285000,
+    desc:'Version longue de la Blanche. La ligne descend jusqu’aux chevilles, ouverte sur le côté. Pensée pour le soir.',
+    details:['Écru','Fente latérale','Façonnée à Cocody'],
+    sizes:[34,36,38,40,42],
+    images:['blanche1.png','blanche2.png'] },
+  { id:'robe-bleue', name:'Robe Bleue', cat:'Robes', price:255000,
+    desc:'Bleu nuit teinté en pièce, rappel des indigos du Sahel. Manches longues, ceinture fine, tombé net.',
+    details:['Indigo teinté','Ceinture fine','Pièce numérotée'],
+    sizes:[34,36,38,40,42],
+    images:['robebleu1.png','robebleu2.png'] },
+  { id:'costume-plateau', name:'Costume Plateau', cat:'Costumes', price:450000,
+    desc:'Deux pièces à l’épaule naturelle, revers ouvert, pantalon à tombé droit. Taillé pour la chaleur du Plateau.',
+    details:['Laine froide','Épaule naturelle','42 h d’atelier'],
+    sizes:[44,46,48,50,52],
+    images:['cost1.png','cost2.png'] },
+  { id:'tailleur-treichville', name:'Tailleur Treichville', cat:'Costumes', price:465000,
+    desc:'Trois pièces d’une même ligne — veste, gilet, pantalon. Boutons recouverts de la même étoffe, cousus main.',
+    details:['Trois pièces','Boutons recouverts','Coupe ouverte'],
+    sizes:[44,46,48,50,52],
+    images:['costu1.png','costu2.png','costu3.png'] },
+];
+const CATS = [
+  { name:'Robes',                img:'bord1.png',  filter:'Robes' },
+  { name:'Costumes',             img:'cost1.png',  filter:'Costumes' },
+  { name:'Toute la collection',  img:'pv2.png',    filter:'Tous' },
+];
+const INFO = {
+  histoire:{ label:'La Maison', title:'Depuis 2016, à Cocody', body:[
+    '<p>Maison Kanty’s est née dans un atelier de Cocody, autour d’une conviction simple : l’élégance n’a pas de capitale attitrée.</p>',
+    '<p>Nous travaillons avec une dizaine d’artisans — tisseurs, teinturiers, couturiers — dont certains gestes se transmettent depuis trois générations. Le wax y est réinterprété, le tissage manuel y rencontre la rigueur des grandes maisons.</p>',
+    '<p>Chaque collection compte peu de pièces, produites en séries courtes. Une garde-robe qui traverse le temps, façonnée à la main, pensée pour durer plus longtemps que les saisons.</p>' ]},
+  livraison:{ label:'Service', title:'Livraison', body:[
+    '<p>Livraison offerte à Abidjan et dans les environs, sous 48 heures, par coursier dédié.</p>',
+    '<p>Expédition internationale en 5 à 7 jours ouvrés, suivi inclus. Chaque pièce quitte l’atelier emballée à la main, dans un écrin réutilisable.</p>' ]},
+  retours:{ label:'Service', title:'Retours', body:[
+    '<p>Vous disposez de 14 jours pour changer d’avis. Le retour est offert, en échange ou en remboursement, traité sous 5 jours ouvrés après réception.</p>',
+    '<p>Les pièces personnalisées et les éditions numérotées s’échangent en taille, dans la limite des stocks de l’atelier.</p>' ]},
+  tailles:{ label:'Service', title:'Guide des tailles', body:[
+    '<p>Mensurations en centimètres, prises à plat sur le corps. Entre deux tailles, l’atelier recommande la plus grande.</p>',
+    '<table><tr><th>Taille</th><th>Poitrine</th><th>Taille</th><th>Hanches</th></tr>'
+    +'<tr><td>34 / XS</td><td>82</td><td>64</td><td>88</td></tr>'
+    +'<tr><td>36 / S</td><td>86</td><td>68</td><td>92</td></tr>'
+    +'<tr><td>38 / M</td><td>90</td><td>72</td><td>96</td></tr>'
+    +'<tr><td>40 / L</td><td>94</td><td>76</td><td>100</td></tr>'
+    +'<tr><td>42 / XL</td><td>98</td><td>80</td><td>104</td></tr>'
+    +'<tr><td>44–52</td><td colspan="3">Coupes costume — prendre rendez-vous en atelier</td></tr></table>' ]},
+  contact:{ label:'Service', title:'Contact', body:[
+    '<p><strong>Atelier.</strong> Cocody, Abidjan — Côte d’Ivoire. Visites sur rendez-vous, du mardi au samedi, 10 h – 18 h.</p>',
+    '<p><strong>Écrire.</strong> bonjour@maisonkantys.ci</p>',
+    '<p><strong>Téléphoner.</strong> +225 27 22 49 00 00</p>',
+    '<p>Nous répondons sous 24 heures ouvrées, en français ou en anglais.</p>' ]},
+  legal:{ label:'Informations', title:'Mentions légales', body:[
+    '<p>Maison Kanty’s — site de démonstration réalisé à des fins de présentation. Les produits, prix et coordonnées sont fictifs.</p>',
+    '<p>Aucune donnée n’est collectée ni transmise ; le formulaire d’inscription reste local à cette page.</p>' ]},
+};
+
+/* ════════════════════════════════════════════
+   OUTILS
+   ════════════════════════════════════════════ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const fmt = n => n.toLocaleString('fr-FR') + ' FCFA';
+const pad = n => String(n).padStart(2,'0');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let toastTimer;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('on'), 2400);
+}
+/* Sécurité : si un fichier image manque, un fond beige évite l’icône cassée */
+document.addEventListener('error', e=>{
+  const t = e.target;
+  if(t.tagName==='IMG'){
+    t.style.background = 'var(--color-beige)';
+    t.style.minHeight = t.style.minHeight || '200px';
+  }
+}, true);
+
+/* ════════════════════════════════════════════
+   SYSTÈME DE VUES — accueil / catalogue détachés
+   ════════════════════════════════════════════ */
+const views = { home: $('#view-home'), catalog: $('#view-catalog') };
+let currentView = 'home';
+
+function showView(name){
+  if(!views[name]) return;
+  Object.entries(views).forEach(([k,el])=> el.classList.toggle('active', k===name));
+  currentView = name;
+  document.title = (name==='catalog' ? 'Catalogue SS26 — ' : '') + 'Maison Kanty’s — Abidjan';
+  window.scrollTo(0,0);
+  onScroll();
+  if(name==='home') requestAnimationFrame(sizeCanvas);
+  if(name==='catalog') revealVisibleProducts();
+}
+function goToSection(sel){
+  if(['#categories','#maison','#galerie','#hero'].includes(sel) && currentView!=='home') showView('home');
+  requestAnimationFrame(()=> requestAnimationFrame(()=>{
+    const el = document.querySelector(sel);
+    if(el) el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth'});
+  }));
+}
+function revealVisibleProducts(){
+  requestAnimationFrame(()=>{
+    $$('.product:not(.hidden)').forEach(p=>{
+      const r = p.getBoundingClientRect();
+      if(r.top < innerHeight && r.bottom > 0) p.classList.add('visible');
+    });
+  });
+}
+
+/* ════════════════════════════════════════════
+   HERO — film génératif en secours
+   herok.mp4 remplace le canvas dès qu’il joue
+   ════════════════════════════════════════════ */
+const canvas = $('#drapeCanvas');
+const ctx = canvas.getContext('2d');
+let cw, ch, vignetteCache = null, canvasActive = true, heroVisible = true;
+
+function sizeCanvas(){
+  cw = canvas.clientWidth; ch = canvas.clientHeight;
+  if(!cw || !ch) return;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = cw * dpr; canvas.height = ch * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  vignetteCache = document.createElement('canvas');
+  vignetteCache.width = cw; vignetteCache.height = ch;
+  const vc = vignetteCache.getContext('2d');
+  const g = vc.createRadialGradient(cw/2, ch/2, Math.min(cw,ch)*.3, cw/2, ch/2, Math.max(cw,ch)*.75);
+  g.addColorStop(0,'rgba(13,13,13,0)');
+  g.addColorStop(1,'rgba(13,13,13,.55)');
+  vc.fillStyle = g; vc.fillRect(0,0,cw,ch);
+}
+sizeCanvas();
+addEventListener('resize', ()=>{ if(currentView==='home') sizeCanvas(); });
+
+const LINES = 22;
+function drawLine(i, t){
+  const baseY = ch * (0.18 + 0.66 * i/(LINES-1));
+  const mix = i/(LINES-1);
+  const r = Math.round(244 + (176-244)*mix),
+        g = Math.round(241 + (141-241)*mix),
+        b = Math.round(236 + ( 95-236)*mix);
+  ctx.strokeStyle = `rgba(${r},${g},${b},${(0.045 + 0.10*(1-mix)).toFixed(3)})`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for(let x=0; x<=cw; x+=10){
+    const k = x/cw;
+    const env = Math.pow(Math.sin(Math.PI*k), 1.2);
+    const y = baseY
+      + env * ( Math.sin(x*0.0038 + t*0.35 + i*0.9) * 30
+              + Math.sin(x*0.0090 - t*0.25 + i*1.7) * 15
+              + Math.sin(x*0.0016 + t*0.12 + i*0.5) * 46 );
+    x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+function drawGrain(){
+  ctx.globalAlpha = .045;
+  ctx.fillStyle = '#f4f1ec';
+  for(let i=0;i<220;i++) ctx.fillRect(Math.random()*cw, Math.random()*ch, 1, 1);
+  ctx.fillStyle = '#000';
+  for(let i=0;i<220;i++) ctx.fillRect(Math.random()*cw, Math.random()*ch, 1, 1);
+  ctx.globalAlpha = 1;
+}
+const t0 = performance.now();
+function frame(now){
+  if(canvasActive && heroVisible && currentView==='home'){
+    const t = (now - t0)/1000;
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0,0,cw,ch);
+    for(let i=0;i<LINES;i++) drawLine(i, t);
+    drawGrain();
+    ctx.drawImage(vignetteCache, 0, 0, cw, ch);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+new IntersectionObserver(([e])=> heroVisible = e.isIntersecting).observe($('#hero'));
+
+/* Vidéo locale — si herok.mp4 ne charge pas, le film génératif reste en fond */
+const vid = $('#heroVideo');
+vid.addEventListener('canplay', ()=>{
+  vid.play().then(()=>{
+    vid.classList.add('on');
+    setTimeout(()=> canvasActive = false, 1600);
+  }).catch(()=>{});
+});
+
+/* ════════════════════════════════════════════
+   BANDEAU DÉFILANT
+   ════════════════════════════════════════════ */
+(function(){
+  const items = ['Pièces façonnées à la main','Tissages d’Abidjan','Wax réinterprété','Éditions limitées','Depuis 2016'];
+  const group = '<div class="marquee-group">' + items.map(i=>`<span>${i}</span><i></i>`).join('') + '</div>';
+  $('#marqueeTrack').innerHTML = group + group;
+})();
+
+/* ════════════════════════════════════════════
+   HEADER
+   ════════════════════════════════════════════ */
+const header = $('#siteHeader');
+function onScroll(){ header.classList.toggle('scrolled', scrollY > 60 || currentView === 'catalog'); }
+addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+const mobileMenu = $('#mobileMenu');
+ $('#burgerBtn').addEventListener('click', ()=>{ mobileMenu.classList.add('open'); document.body.classList.add('no-scroll'); });
+ $('#menuClose').addEventListener('click', closeMenu);
+function closeMenu(){ mobileMenu.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+
+ $$('[data-nav]').forEach(a=> a.addEventListener('click', e=>{
+  e.preventDefault(); closeMenu(); showView(a.dataset.nav);
+}));
+ $$('[data-section]').forEach(a=> a.addEventListener('click', e=>{
+  e.preventDefault(); closeMenu(); goToSection(a.dataset.section);
+}));
+
+/* ════════════════════════════════════════════
+   CATÉGORIES (accueil) — vignettes avec vos photos
+   ════════════════════════════════════════════ */
+ $('#catGrid').innerHTML = CATS.map(c=>{
+  const n = c.filter==='Tous' ? PRODUCTS.length : PRODUCTS.filter(p=>p.cat===c.filter).length;
+  return `
+  <button class="cat-card" data-filter="${c.filter}" aria-label="Voir ${c.name} dans le catalogue">
+    <figure><img class="ph" src="${c.img}" alt="${c.name}"></figure>
+    <span class="cat-caption"><span class="name">${c.name}</span><span class="go">→</span></span>
+    <span class="cat-count">${pad(n)} pièce${n>1?'s':''}</span>
+  </button>`;
+}).join('');
+ $$('.cat-card').forEach(card => card.addEventListener('click', ()=>{
+  showView('catalog');
+  setFilter(card.dataset.filter);
+}));
+ $('#seeAllBtn').addEventListener('click', e=>{ e.preventDefault(); showView('catalog'); setFilter('Tous'); });
+ $('#heroCollectionLink').addEventListener('click', e=>{ e.preventDefault(); showView('catalog'); });
+ $('#backHome').addEventListener('click', ()=> showView('home'));
+
+/* ════════════════════════════════════════════
+   CATALOGUE — carrousels dynamiques + halo flouté
+   ════════════════════════════════════════════ */
+const svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M15 4.5 7.5 12l7.5 7.5"/></svg>';
+const svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="m9 4.5 7.5 7.5L9 19.5"/></svg>';
+const svgHeart = '<svg viewBox="0 0 24 24"><path d="M12 20.3C7.4 16.9 3 13.4 3 9.3 3 6.4 5.2 4.5 7.6 4.5c1.8 0 3.4 1 4.4 2.6 1-1.6 2.6-2.6 4.4-2.6 2.4 0 4.6 1.9 4.6 4.8 0 4.1-4.4 7.6-9 11z"/></svg>';
+
+ $('#productList').innerHTML = PRODUCTS.map(p=>{
+  const n = p.images.length;
+  return `
+  <article class="product" id="prod-${p.id}" data-cat="${p.cat}" data-name="${p.name}" data-price="${p.price}">
+    <div class="p-carousel">
+      <img class="p-glow" src="${p.images[0]}" alt="" aria-hidden="true">
+      <div class="p-frame">
+        <div class="p-track">
+          ${p.images.map((src,i)=>`<div class="p-slide"><img class="ph" src="${src}" alt="${p.name} — vue ${i+1} sur ${n}" draggable="false"></div>`).join('')}
+        </div>
+        <button class="c-btn c-prev" aria-label="Image précédente">${svgPrev}</button>
+        <button class="c-btn c-next" aria-label="Image suivante">${svgNext}</button>
+      </div>
+      <div class="c-foot">
+        <span class="c-count">${pad(1)} / ${pad(n)}</span>
+        <div class="c-dots">${p.images.map((_,i)=>`<span class="c-dot${i===0?' on':''}"></span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="p-info">
+      <span class="label">${p.cat}</span>
+      <h3 class="p-name">${p.name}</h3>
+      <p class="p-price">${fmt(p.price)}</p>
+      <p class="p-desc">${p.desc}</p>
+      <ul class="p-details">${p.details.map(d=>`<li>${d}</li>`).join('')}</ul>
+      <div class="p-sizes">
+        <span class="label">Taille</span>
+        <div class="sizes-row">${p.sizes.map((s,i)=>`<button class="size-btn${i===Math.floor(p.sizes.length/2)?' active':''}" data-size="${s}">${s}</button>`).join('')}</div>
+      </div>
+      <div class="p-actions">
+        <button class="add-btn" data-id="${p.id}">Ajouter au panier <span class="arr">→</span></button>
+        <button class="fav-btn" data-id="${p.id}" aria-label="Ajouter ${p.name} aux favoris">${svgHeart}</button>
+      </div>
+    </div>
+  </article>`;
+}).join('');
+
+/* Carrousels : flèches, points, compteur, balayage — le halo flouté suit la photo affichée */
+function initCarousel(root){
+  const track = root.querySelector('.p-track');
+  const slides = [...root.querySelectorAll('.p-slide')];
+  const dots  = [...root.querySelectorAll('.c-dot')];
+  const count = root.querySelector('.c-count');
+  const glow  = root.querySelector('.p-glow');
+  const n = dots.length;
+  let idx = 0;
+  function go(i){
+    idx = (i + n) % n;
+    track.style.transform = `translateX(-${idx*100}%)`;
+    track.style.transition = 'transform .45s cubic-bezier(.25,.46,.45,.94)';
+    count.textContent = `${pad(idx+1)} / ${pad(n)}`;
+    dots.forEach((d,j)=> d.classList.toggle('on', j===idx));
+    const activeImg = slides[idx] && slides[idx].querySelector('img');
+    if(glow && activeImg && glow.src !== activeImg.src) glow.src = activeImg.src;
+  }
+  root.querySelector('.c-prev').addEventListener('click', ()=> go(idx-1));
+  root.querySelector('.c-next').addEventListener('click', ()=> go(idx+1));
+  dots.forEach((d,j)=> d.addEventListener('click', ()=> go(j)));
+  let startX = null;
+  track.addEventListener('pointerdown', e=> startX = e.clientX);
+  track.addEventListener('pointerup', e=>{
+    if(startX===null) return;
+    const dx = e.clientX - startX;
+    if(Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
+    startX = null;
+  });
+  go(0);
+}
+ $$('.p-carousel').forEach(initCarousel);
+
+ $$('.sizes-row').forEach(row=>{
+  row.addEventListener('click', e=>{
+    const b = e.target.closest('.size-btn');
+    if(!b) return;
+    row.querySelectorAll('.size-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
+
+/* Filtres du catalogue — Robes / Costumes */
+const FILTERS = ['Tous','Robes','Costumes'];
+let activeFilter = 'Tous';
+ $('#filters').innerHTML = FILTERS.map(f=>`<button class="filter-btn${f==='Tous'?' active':''}" data-filter="${f}">${f}</button>`).join('');
+function setFilter(f){
+  activeFilter = f;
+  $$('.filter-btn').forEach(b=> b.classList.toggle('active', b.dataset.filter===f));
+  applyFilter();
+}
+function applyFilter(){
+  const visible = [];
+  $$('.product').forEach(p=>{
+    const favBtn = p.querySelector('.fav-btn');
+    const show = activeFilter==='Tous' || p.dataset.cat===activeFilter
+              || (activeFilter==='__fav' && favorites.has(favBtn ? favBtn.dataset.id : ''));
+    p.classList.toggle('hidden', !show);
+    if(show) visible.push(p);
+  });
+  visible.forEach((p,i)=> p.classList.toggle('flip', i % 2 === 1));
+  $('#piecesCount').textContent = `${pad(visible.length)} pièce${visible.length>1?'s':''}`;
+  $('#catalogEmpty').classList.toggle('on', visible.length===0);
+  if(currentView==='catalog') revealVisibleProducts();
+}
+ $$('.filter-btn').forEach(b=> b.addEventListener('click', ()=> setFilter(b.dataset.filter)));
+
+/* Apparition au défilement — produits + galerie */
+const revealObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{ threshold:.12 });
+ $$('.product, .g-item').forEach(el=> revealObserver.observe(el));
+applyFilter();
+
+/* ════════════════════════════════════════════
+   FAVORIS
+   ════════════════════════════════════════════ */
+const favorites = new Set();
+ $$('.fav-btn').forEach(btn=> btn.addEventListener('click', ()=>{
+  const id = btn.dataset.id;
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(favorites.has(id)){ favorites.delete(id); btn.classList.remove('active'); toast(`${p.name} — retirée des favoris`); }
+  else { favorites.add(id); btn.classList.add('active'); toast(`${p.name} — ajoutée aux favoris`); }
+  const fc = $('#favCount');
+  fc.textContent = favorites.size;
+  fc.classList.toggle('empty', favorites.size===0);
+  if(activeFilter==='__fav') applyFilter();
+}));
+ $('#favHeaderBtn').addEventListener('click', ()=>{
+  if(favorites.size===0){ toast('Aucune pièce favorite pour l’instant'); return; }
+  showView('catalog');
+  setFilter('__fav');
+});
+
+/* ════════════════════════════════════════════
+   PANIER
+   ════════════════════════════════════════════ */
+const cart = [];
+const cartDrawer = $('#cartDrawer'), cartOverlay = $('#cartOverlay');
+function openCart(){ renderCart(); cartDrawer.classList.add('open'); cartOverlay.classList.add('open'); document.body.classList.add('no-scroll'); }
+function closeCart(){ cartDrawer.classList.remove('open'); cartOverlay.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+ $('#cartBtn').addEventListener('click', openCart);
+ $('#cartClose').addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+
+function addToCart(p, size){
+  const key = p.id + '_' + size;
+  const existing = cart.find(i=> i.key===key);
+  if(existing) existing.qty++;
+  else cart.push({ key, id:p.id, name:p.name, size, price:p.price, qty:1, img:p.images[0] });
+  const cc = $('#cartCount');
+  cc.textContent = cart.reduce((s,i)=> s+i.qty, 0);
+  cc.classList.remove('empty');
+  toast(`${p.name} — ajoutée au panier`);
+}
+ $$('.add-btn').forEach(btn=> btn.addEventListener('click', ()=>{
+  const p = PRODUCTS.find(x=>x.id===btn.dataset.id);
+  const size = btn.closest('.p-info').querySelector('.size-btn.active').dataset.size;
+  addToCart(p, size);
+}));
+
+function renderCart(){
+  const body = $('#cartBody'), foot = $('#cartFoot');
+  if(cart.length===0){
+    foot.style.display = 'none';
+    body.innerHTML = `<div class="cart-empty">
+      <p>Votre panier est vide.</p>
+      <button class="cta" id="cartSeeAll">Voir le catalogue <span class="arr">→</span></button></div>`;
+    body.querySelector('#cartSeeAll').addEventListener('click', ()=>{
+      closeCart(); showView('catalog'); setFilter('Tous');
+    });
+    return;
+  }
+  foot.style.display = '';
+  body.innerHTML = cart.map(i=>`
+    <div class="cart-item">
+      <img class="ph" src="${i.img}" alt="${i.name}">
+      <div class="ci-body">
+        <h4>${i.name}</h4>
+        <span class="ci-meta">Taille ${i.size}</span>
+        <div class="ci-row">
+          <div class="qty">
+            <button data-act="minus" data-key="${i.key}" aria-label="Réduire">−</button>
+            <span>${i.qty}</span>
+            <button data-act="plus" data-key="${i.key}" aria-label="Augmenter">+</button>
+          </div>
+          <span class="ci-price">${fmt(i.price * i.qty)}</span>
+        </div>
+        <button class="ci-remove" data-act="remove" data-key="${i.key}">Retirer</button>
+      </div>
+    </div>`).join('');
+  $('#cartTotal').textContent = fmt(cart.reduce((s,i)=> s + i.price*i.qty, 0));
+  body.querySelectorAll('button[data-act]').forEach(b=> b.addEventListener('click', ()=>{
+    const it = cart.find(x=>x.key===b.dataset.key);
+    if(!it) return;
+    if(b.dataset.act==='plus') it.qty++;
+    if(b.dataset.act==='minus') it.qty = Math.max(1, it.qty-1);
+    if(b.dataset.act==='remove') cart.splice(cart.indexOf(it),1);
+    const cc = $('#cartCount');
+    const total = cart.reduce((s,i)=> s+i.qty, 0);
+    cc.textContent = total;
+    cc.classList.toggle('empty', total===0);
+    renderCart();
+  }));
+}
+ $('#checkoutBtn').addEventListener('click', ()=>{
+  if(cart.length===0){ toast('Votre panier est vide'); return; }
+  const ref = 'MK-SS26-' + pad(Math.floor(Math.random()*90)+10);
+  $('#cartBody').innerHTML = `<div class="cart-confirm">
+    <span class="label">Commande enregistrée</span>
+    <h3>Merci.</h3>
+    <p>Votre demande a bien été reçue. L’atelier vous écrit sous 24 heures pour la confirmation et la livraison.</p>
+    <span class="ref">Référence ${ref}</span>
+    <button class="cta" id="confirmClose">Continuer <span class="arr">→</span></button></div>`;
+  $('#cartFoot').style.display = 'none';
+  cart.length = 0;
+  const cc = $('#cartCount');
+  cc.textContent = '0'; cc.classList.add('empty');
+  $('#confirmClose').addEventListener('click', closeCart);
+});
+
+/* ════════════════════════════════════════════
+   RECHERCHE
+   ════════════════════════════════════════════ */
+const searchOverlay = $('#searchOverlay'), searchInput = $('#searchInput');
+ $('#searchBtn').addEventListener('click', ()=>{
+  searchOverlay.classList.add('open'); document.body.classList.add('no-scroll');
+  setTimeout(()=> searchInput.focus(), 250);
+  renderSearch('');
+});
+function closeSearch(){ searchOverlay.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+ $('#searchClose').addEventListener('click', closeSearch);
+function renderSearch(q){
+  q = q.trim().toLowerCase();
+  const hits = PRODUCTS.filter(p=> !q || (p.name+' '+p.cat+' '+p.desc).toLowerCase().includes(q));
+  $('#searchResults').innerHTML = hits.length
+    ? hits.map(p=>`<button class="search-hit" data-id="${p.id}">
+        <span><span class="sh-name">${p.name}</span><br><span class="sh-cat">${p.cat}</span></span>
+        <span class="sh-price">${fmt(p.price)}</span></button>`).join('')
+    : '<p class="search-none">Rien trouvé — essayez « robe » ou « costume »…</p>';
+  $$('.search-hit').forEach(h=> h.addEventListener('click', ()=>{
+    closeSearch();
+    showView('catalog');
+    setFilter('Tous');
+    setTimeout(()=>{
+      const el = $('#prod-'+h.dataset.id);
+      el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'center'});
+      el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+    }, 180);
+  }));
+}
+searchInput.addEventListener('input', ()=> renderSearch(searchInput.value));
+
+/* ════════════════════════════════════════════
+   MODALS D'INFORMATION
+   ════════════════════════════════════════════ */
+const modalBox = $('#modalBox'), modalOverlay = $('#modalOverlay');
+ $$('button[data-info]').forEach(b=> b.addEventListener('click', ()=>{
+  const d = INFO[b.dataset.info];
+  if(!d) return;
+  $('#modalLabel').textContent = d.label;
+  $('#modalTitle').textContent = d.title;
+  $('#modalBody').innerHTML = d.body.map(x=>`<p>${x}</p>`).join('');
+  modalBox.classList.add('open'); modalOverlay.classList.add('open');
+  document.body.classList.add('no-scroll');
+}));
+function closeModal(){ modalBox.classList.remove('open'); modalOverlay.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+ $('#modalClose').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
+
+/* ════════════════════════════════════════════
+   NEWSLETTER
+   ════════════════════════════════════════════ */
+ $('#newsForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const v = $('#newsEmail').value.trim();
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  const msg = $('#newsMsg');
+  msg.textContent = ok ? 'Merci. Vous êtes sur la liste.' : 'Cette adresse semble incomplète.';
+  if(ok){ $('#newsEmail').value = ''; toast('Inscription confirmée'); }
+});
+
+/* ════════════════════════════════════════════
+   ÉCHAP — ferme tout
+   ════════════════════════════════════════════ */
+addEventListener('keydown', e=>{
+  if(e.key!=='Escape') return;
+  closeCart(); closeMenu(); closeSearch(); closeModal();
+});
+</script>
+</body>
+</html>
