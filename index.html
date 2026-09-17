@@ -21,7 +21,7 @@
   --color-muted:#8c8c8c;
   --serif:"Cormorant Garamond","Playfair Display","Times New Roman",serif;
   --sans:"Jost","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --ease:cubic-bezier(.25,.46,.45,.94);
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -83,7 +83,7 @@ a{color:inherit;text-decoration:none}
 .back-link{
   display:inline-flex;align-items:center;gap:10px;width:fit-content;
   font-weight:500;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--color-muted);padding-bottom:6px;position:relative;
+  color:var(--color-muted);padding-bottom:4px;position:relative;
   transition:color .35s var(--ease);
 }
 .back-link::after{
@@ -158,7 +158,7 @@ a{color:inherit;text-decoration:none}
 .burger span{display:block;width:20px;height:1px;background:currentColor;transition:transform .3s var(--ease)}
 
 /* ============================================================
-   HERO — vidéo herok.mp4 + film génératif en secours
+   HERO — vidéo herok.mp4, active immédiatement
    ============================================================ */
 .hero{
   position:relative;height:100vh;height:100svh;min-height:620px;
@@ -168,9 +168,9 @@ a{color:inherit;text-decoration:none}
 #drapeCanvas{position:absolute;inset:0;width:100%;height:100%}
 #heroVideo{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity 1.6s ease;
+  opacity:0;transition:opacity .7s ease;
 }
-#heroVideo.on{opacity:.8}
+#heroVideo.on{opacity:.85}
 .hero-veil{position:absolute;inset:0;background:rgba(13,13,13,.22)}
 .hero-content{
   position:relative;z-index:2;text-align:center;
@@ -234,10 +234,10 @@ a{color:inherit;text-decoration:none}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
 /* ============================================================
-   CATÉGORIES — 3 vignettes (Robes / Costumes / Collection)
+   CATÉGORIES — 4 vignettes (Robes / Ensembles / Costumes / Collection)
    ============================================================ */
 #categories{background:var(--color-cream)}
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px)}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,24px)}
 .cat-card{display:block;text-align:left}
 .cat-card figure{overflow:hidden;position:relative}
 .cat-card img{
@@ -255,7 +255,7 @@ a{color:inherit;text-decoration:none}
 .cat-count{display:block;margin-top:5px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted)}
 
 /* ============================================================
-   À PROPOS — LA MAISON
+   À PROPOS — LA MAISON (photo : mais1.png)
    ============================================================ */
 #maison{background:var(--color-beige)}
 .maison-grid{display:grid;grid-template-columns:45% 55%;gap:clamp(40px,6vw,90px);align-items:center}
@@ -294,26 +294,39 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ============================================================
-   PAGE CATALOGUE — SS26 (vue détachée)
+   PAGE CATALOGUE — SS26 (en-tête recomposé, plus dense)
    ============================================================ */
 .catalog-head{
-  padding:clamp(130px,18vh,190px) 6vw clamp(36px,5vw,56px);
-  display:flex;flex-direction:column;gap:20px;
+  padding:clamp(110px,14vh,150px) 6vw 0;
+}
+.catalog-top{
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid rgba(13,13,13,.12);
+}
+.catalog-main{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:36px;flex-wrap:wrap;
+  padding:clamp(28px,4.5vw,50px) 0 clamp(24px,3.5vw,36px);
 }
 .catalog-title{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(2.8rem,6vw,4.8rem);
-  letter-spacing:-.015em;line-height:1;
+  font-size:clamp(2.6rem,5.5vw,4.4rem);
+  letter-spacing:-.015em;line-height:1.02;
 }
 .catalog-title em{font-style:italic;color:var(--color-camel)}
 .catalog-intro{
   font-family:var(--serif);font-style:italic;font-weight:300;
-  font-size:1.08rem;color:#3d3a35;max-width:520px;
+  font-size:1.08rem;color:#3d3a35;max-width:460px;margin-top:16px;
 }
+.catalog-meta{
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end;text-align:right;
+  padding-bottom:6px;
+}
+.catalog-meta .row{display:flex;align-items:center;gap:12px}
+.catalog-meta .row i{width:4px;height:4px;background:var(--color-camel);transform:rotate(45deg)}
 .catalog-bar{
-  margin-top:18px;padding:18px 0;
-  border-top:1px solid rgba(13,13,13,.1);
   display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:18px 0 0;border-top:1px solid rgba(13,13,13,.12);
+  margin-bottom:clamp(28px,4vw,44px);
 }
 .filters{display:flex;gap:clamp(16px,2.4vw,32px);flex-wrap:wrap;align-items:baseline}
 .filter-btn{
@@ -347,26 +360,40 @@ a{color:inherit;text-decoration:none}
 .product.flash{animation:flash 1.8s var(--ease)}
 @keyframes flash{0%{background:rgba(176,141,95,.12)}100%{background:transparent}}
 
-/* Carrousel produit — halo flouté + photos */
+/* ── Carrousel produit (reconstruit) ─────────────────────
+   .p-frame coupe le débordement et gère le tactile ;
+   .p-track glisse ; les images ne captent pas le pointeur. */
 .p-carousel{position:relative}
-.p-track{display:flex;overflow:hidden}
-.p-slide{min-width:100%}
-.p-slide img{width:100%;aspect-ratio:3/4;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.p-frame{
+  position:relative;z-index:1;overflow:hidden;
+  touch-action:pan-y;              /* le doigt glisse : horizontal = carrousel, vertical = page */
+}
+.p-track{
+  display:flex;will-change:transform;
+  cursor:grab;
+}
+.p-track.dragging{cursor:grabbing}
+.p-slide{min-width:100%;user-select:none;-webkit-user-select:none}
+.p-slide img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;
+  pointer-events:none;             /* le pointeur va au track, jamais aux images */
+  -webkit-user-drag:none;
+}
 .c-btn{
   position:absolute;top:50%;transform:translateY(-50%);
   width:46px;height:46px;border-radius:50%;
   border:1px solid rgba(13,13,13,.18);background:rgba(244,241,236,.92);
-  display:grid;place-items:center;
+  display:grid;place-items:center;z-index:3;
   transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
 }
-.c-btn svg{width:16px;height:16px}
+.c-btn svg{width:16px;height:16px;pointer-events:none}
 .c-prev{left:18px}
 .c-next{right:18px}
 .c-btn:hover{background:var(--color-black);color:var(--color-cream);border-color:var(--color-black)}
 .c-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;position:relative;z-index:2}
 .c-count{font-size:.7rem;letter-spacing:.22em;color:var(--color-muted)}
 .c-dots{display:flex;gap:8px}
-.c-dot{width:16px;height:1px;background:rgba(13,13,13,.22);transition:background .3s var(--ease),width .3s var(--ease)}
+.c-dot{width:16px;height:1px;background:rgba(13,13,13,.22);transition:background .3s var(--ease),width .3s var(--ease);cursor:pointer}
 .c-dot.on{background:var(--color-black);width:26px}
 
 /* Informations produit */
@@ -624,6 +651,8 @@ a{color:inherit;text-decoration:none}
   .cat-grid{grid-template-columns:1fr 1fr}
   .g-grid{grid-template-columns:1fr;max-width:520px;gap:48px}
   .g-note{text-align:left}
+  .catalog-main{flex-direction:column;align-items:flex-start;gap:22px}
+  .catalog-meta{align-items:flex-start;text-align:left;padding-bottom:0}
 }
 @media (max-width:520px){
   .site-header{padding:0 5vw}
@@ -674,10 +703,10 @@ a{color:inherit;text-decoration:none}
      ═══════════════════════════════════════════ -->
 <div class="view active" id="view-home">
 
-  <!-- HERO — vidéo herok.mp4 -->
+  <!-- HERO — vidéo herok.mp4, lancée immédiatement -->
   <section class="hero" id="hero">
     <canvas id="drapeCanvas" aria-hidden="true"></canvas>
-    <video id="heroVideo" src="herok.mp4" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+    <video id="heroVideo" src="herok.mp4" muted loop playsinline autoplay preload="auto" disablepictureinpicture aria-hidden="true"></video>
     <div class="hero-veil" aria-hidden="true"></div>
 
     <div class="hero-content">
@@ -712,11 +741,11 @@ a{color:inherit;text-decoration:none}
     <div class="cat-grid" id="catGrid"></div>
   </section>
 
-  <!-- À PROPOS -->
+  <!-- À PROPOS — photo mais1.png -->
   <section class="section" id="maison">
     <div class="maison-grid">
       <figure class="maison-photo">
-        <img class="ph" src="pv1.png" alt="Séance éditoriale — Maison Kanty’s, atelier de Cocody" onerror="this.style.background='var(--color-beige)';this.style.minHeight='400px'">
+        <img class="ph" src="mais1.png" alt="Séance éditoriale — Maison Kanty’s, atelier de Cocody">
         <figcaption class="label">Atelier de Cocody — façonné main</figcaption>
       </figure>
       <div class="maison-text">
@@ -741,7 +770,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- GALERIE — 3 PHOTOS AU-DESSUS DU FOOTER, COULEURS QUI DÉBORDENT -->
+  <!-- GALERIE — 3 PHOTOS AU-DESSUS DU FOOTER -->
   <section class="section" id="galerie">
     <div class="section-head">
       <div class="stack">
@@ -790,17 +819,27 @@ a{color:inherit;text-decoration:none}
 </div><!-- /view-home -->
 
 <!-- ═══════════════════════════════════════════
-     VUE 2 — CATALOGUE SS26 (page détachée)
+     VUE 2 — CATALOGUE SS26 (en-tête recomposé)
      ═══════════════════════════════════════════ -->
 <section class="view" id="view-catalog">
   <div class="catalog-head">
-    <button class="back-link" id="backHome"><span class="arr">←</span> Accueil</button>
-    <span class="label">Nouvelle collection — Spring–Summer 2026</span>
-    <h1 class="catalog-title">Catalogue <em>SS26</em></h1>
-    <p class="catalog-intro">Six pièces, façonnées à la main dans l’atelier de Cocody. Chaque matière est choisie pour traverser les saisons.</p>
+    <div class="catalog-top">
+      <button class="back-link" id="backHome"><span class="arr">←</span> Accueil</button>
+      <span class="label">Nouvelle collection — Spring–Summer 2026</span>
+    </div>
+    <div class="catalog-main">
+      <div>
+        <h1 class="catalog-title">Catalogue <em>SS26</em></h1>
+        <p class="catalog-intro">Huit pièces façonnées à la main à Cocody. Robes, ensembles, costumes — dessinés pour durer au-delà de la saison.</p>
+      </div>
+      <div class="catalog-meta">
+        <div class="row"><span class="label">Cocody — Abidjan</span><i></i></div>
+        <div class="row"><span class="label">Édition limitée</span><i></i></div>
+      </div>
+    </div>
     <div class="catalog-bar">
       <div class="filters" id="filters"></div>
-      <span class="pieces-count" id="piecesCount">06 pièces</span>
+      <span class="pieces-count" id="piecesCount">08 pièces</span>
     </div>
   </div>
 
@@ -893,7 +932,7 @@ a{color:inherit;text-decoration:none}
   </button>
   <div class="search-inner">
     <span class="label">Rechercher une pièce</span>
-    <input type="text" id="searchInput" placeholder="Robe, costume…" autocomplete="off">
+    <input type="text" id="searchInput" placeholder="Robe, ensemble, costume…" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
@@ -932,11 +971,21 @@ const PRODUCTS = [
     details:['Écru','Fente latérale','Façonnée à Cocody'],
     sizes:[34,36,38,40,42],
     images:['blanche1.png','blanche2.png'] },
+  { id:'robe-longue', name:'Robe Longue', cat:'Robes', price:275000,
+    desc:'Ligne longue et continue, taille marquée d’une couture fine. Une robe qui marche aussi bien pieds nus qu’en talons.',
+    details:['Coupe longue','Couture taille','Pièce numérotée'],
+    sizes:[34,36,38,40,42],
+    images:['robl1.png','robl2.png'] },
   { id:'robe-bleue', name:'Robe Bleue', cat:'Robes', price:255000,
     desc:'Bleu nuit teinté en pièce, rappel des indigos du Sahel. Manches longues, ceinture fine, tombé net.',
     details:['Indigo teinté','Ceinture fine','Pièce numérotée'],
     sizes:[34,36,38,40,42],
     images:['robebleu1.png','robebleu2.png'] },
+  { id:'ensemble-assinie', name:'Ensemble Assinie', cat:'Ensembles', price:320000,
+    desc:'Deux pièces d’une même ligne, pensées ensemble et portées séparément. Veste fluide, bas ajusté.',
+    details:['Deux pièces','Coton-lin','Boutons en iroko'],
+    sizes:[36,38,40,42,44],
+    images:['ens1.png','ens2.png'] },
   { id:'costume-plateau', name:'Costume Plateau', cat:'Costumes', price:450000,
     desc:'Deux pièces à l’épaule naturelle, revers ouvert, pantalon à tombé droit. Taillé pour la chaleur du Plateau.',
     details:['Laine froide','Épaule naturelle','42 h d’atelier'],
@@ -950,6 +999,7 @@ const PRODUCTS = [
 ];
 const CATS = [
   { name:'Robes',                img:'bord1.png',  filter:'Robes' },
+  { name:'Ensembles',            img:'ens1.png',   filter:'Ensembles' },
   { name:'Costumes',             img:'cost1.png',  filter:'Costumes' },
   { name:'Toute la collection',  img:'pv2.png',    filter:'Tous' },
 ];
@@ -1021,6 +1071,8 @@ function showView(name){
   document.title = (name==='catalog' ? 'Catalogue SS26 — ' : '') + 'Maison Kanty’s — Abidjan';
   window.scrollTo(0,0);
   onScroll();
+  if(name==='home'){ if(vid.readyState>=2) vid.play().catch(()=>{}); }
+  else { vid.pause(); }
   if(name==='home') requestAnimationFrame(sizeCanvas);
   if(name==='catalog') revealVisibleProducts();
 }
@@ -1041,8 +1093,7 @@ function revealVisibleProducts(){
 }
 
 /* ════════════════════════════════════════════
-   HERO — film génératif en secours
-   herok.mp4 remplace le canvas dès qu’il joue
+   HERO — vidéo lancée immédiatement
    ════════════════════════════════════════════ */
 const canvas = $('#drapeCanvas');
 const ctx = canvas.getContext('2d');
@@ -1107,16 +1158,34 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-new IntersectionObserver(([e])=> heroVisible = e.isIntersecting).observe($('#hero'));
+new IntersectionObserver(([e])=>{
+  heroVisible = e.isIntersecting;
+  if(heroVisible && vid.readyState>=2) vid.play().catch(()=>{});
+}).observe($('#hero'));
 
-/* Vidéo locale — si herok.mp4 ne charge pas, le film génératif reste en fond */
 const vid = $('#heroVideo');
-vid.addEventListener('canplay', ()=>{
-  vid.play().then(()=>{
-    vid.classList.add('on');
-    setTimeout(()=> canvasActive = false, 1600);
-  }).catch(()=>{});
+let videoOn = false;
+function activateVideo(){
+  if(videoOn) return;
+  const p = vid.play();
+  if(p && p.then){
+    p.then(()=>{
+      videoOn = true;
+      vid.classList.add('on');
+      setTimeout(()=> canvasActive = false, 800);
+    }).catch(()=>{});
+  }
+}
+activateVideo();
+['loadeddata','canplay','playing'].forEach(ev=> vid.addEventListener(ev, activateVideo));
+['pointerdown','touchstart','keydown','wheel','scroll'].forEach(ev=>
+  addEventListener(ev, ()=>{ if(!videoOn && vid.readyState>=2) activateVideo(); },
+    {once:true, passive:true})
+);
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden && currentView==='home' && vid.readyState>=2) vid.play().catch(()=>{});
 });
+vid.addEventListener('error', ()=>{ canvasActive = true; videoOn = false; });
 
 /* ════════════════════════════════════════════
    BANDEAU DÉFILANT
@@ -1148,7 +1217,7 @@ function closeMenu(){ mobileMenu.classList.remove('open'); document.body.classLi
 }));
 
 /* ════════════════════════════════════════════
-   CATÉGORIES (accueil) — vignettes avec vos photos
+   CATÉGORIES (accueil)
    ════════════════════════════════════════════ */
  $('#catGrid').innerHTML = CATS.map(c=>{
   const n = c.filter==='Tous' ? PRODUCTS.length : PRODUCTS.filter(p=>p.cat===c.filter).length;
@@ -1182,7 +1251,7 @@ const svgHeart = '<svg viewBox="0 0 24 24"><path d="M12 20.3C7.4 16.9 3 13.4 3 9
       <img class="p-glow" src="${p.images[0]}" alt="" aria-hidden="true">
       <div class="p-frame">
         <div class="p-track">
-          ${p.images.map((src,i)=>`<div class="p-slide"><img class="ph" src="${src}" alt="${p.name} — vue ${i+1} sur ${n}" draggable="false"></div>`).join('')}
+          ${p.images.map((src,i)=>`<div class="p-slide"><img class="ph" src="${src}" alt="${p.name} — vue ${i+1} sur ${n}"></div>`).join('')}
         </div>
         <button class="c-btn c-prev" aria-label="Image précédente">${svgPrev}</button>
         <button class="c-btn c-next" aria-label="Image suivante">${svgNext}</button>
@@ -1210,36 +1279,69 @@ const svgHeart = '<svg viewBox="0 0 24 24"><path d="M12 20.3C7.4 16.9 3 13.4 3 9
   </article>`;
 }).join('');
 
-/* Carrousels : flèches, points, compteur, balayage — le halo flouté suit la photo affichée */
+/* ── Carrousel reconstruit ───────────────────────────────
+   · glissement en direct : la photo suit le doigt / la souris
+   · capture du pointeur : le glissement ne se perd plus
+     quand on sort du cadre
+   · touch-action:pan-y : balayage horizontal = carrousel,
+     scroll vertical de la page intact
+   · relâchement : au-delà de 50 px on change de vue,
+     sinon on revient en place ; résistance aux extrémités
+   · le halo flouté suit toujours la photo affichée       */
 function initCarousel(root){
-  const track = root.querySelector('.p-track');
+  const track  = root.querySelector('.p-track');
   const slides = [...root.querySelectorAll('.p-slide')];
-  const dots  = [...root.querySelectorAll('.c-dot')];
-  const count = root.querySelector('.c-count');
-  const glow  = root.querySelector('.p-glow');
-  const n = dots.length;
-  let idx = 0;
-  function go(i){
-    idx = (i + n) % n;
-    track.style.transform = `translateX(-${idx*100}%)`;
-    track.style.transition = 'transform .45s cubic-bezier(.25,.46,.45,.94)';
+  const dots   = [...root.querySelectorAll('.c-dot')];
+  const count  = root.querySelector('.c-count');
+  const glow   = root.querySelector('.p-glow');
+  const n      = slides.length;
+  const EASE   = 'transform .5s cubic-bezier(.22,.61,.36,1)';
+  let idx = 0, dragging = false, startX = 0, dx = 0;
+
+  function sync(){
     count.textContent = `${pad(idx+1)} / ${pad(n)}`;
     dots.forEach((d,j)=> d.classList.toggle('on', j===idx));
-    const activeImg = slides[idx] && slides[idx].querySelector('img');
-    if(glow && activeImg && glow.src !== activeImg.src) glow.src = activeImg.src;
+    const activeImg = slides[idx].querySelector('img');
+    if(glow && activeImg && glow.getAttribute('src') !== activeImg.getAttribute('src')){
+      glow.src = activeImg.src;
+    }
   }
+  function go(i, animate = true){
+    idx = (i + n) % n;
+    track.style.transition = animate && !reduceMotion ? EASE : 'none';
+    track.style.transform  = `translateX(${-idx*100}%)`;
+    sync();
+  }
+
   root.querySelector('.c-prev').addEventListener('click', ()=> go(idx-1));
   root.querySelector('.c-next').addEventListener('click', ()=> go(idx+1));
   dots.forEach((d,j)=> d.addEventListener('click', ()=> go(j)));
-  let startX = null;
-  track.addEventListener('pointerdown', e=> startX = e.clientX);
-  track.addEventListener('pointerup', e=>{
-    if(startX===null) return;
-    const dx = e.clientX - startX;
-    if(Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
-    startX = null;
+
+  track.addEventListener('pointerdown', e=>{
+    if(n < 2) return;
+    dragging = true; startX = e.clientX; dx = 0;
+    track.classList.add('dragging');
+    track.style.transition = 'none';
+    if(track.setPointerCapture){ try{ track.setPointerCapture(e.pointerId); }catch(_){} }
   });
-  go(0);
+  track.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    dx = e.clientX - startX;
+    if((idx===0 && dx>0) || (idx===n-1 && dx<0)) dx *= .3;  /* résistance aux extrémités */
+    track.style.transform = `translateX(calc(${-idx*100}% + ${dx}px))`;
+  });
+  function release(){
+    if(!dragging) return;
+    dragging = false;
+    track.classList.remove('dragging');
+    if(Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+    else go(idx);
+  }
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+  track.addEventListener('lostpointercapture', release);
+
+  go(0, false);
 }
  $$('.p-carousel').forEach(initCarousel);
 
@@ -1252,8 +1354,8 @@ function initCarousel(root){
   });
 });
 
-/* Filtres du catalogue — Robes / Costumes */
-const FILTERS = ['Tous','Robes','Costumes'];
+/* Filtres du catalogue — Robes / Ensembles / Costumes */
+const FILTERS = ['Tous','Robes','Ensembles','Costumes'];
 let activeFilter = 'Tous';
  $('#filters').innerHTML = FILTERS.map(f=>`<button class="filter-btn${f==='Tous'?' active':''}" data-filter="${f}">${f}</button>`).join('');
 function setFilter(f){
@@ -1409,7 +1511,7 @@ function renderSearch(q){
     ? hits.map(p=>`<button class="search-hit" data-id="${p.id}">
         <span><span class="sh-name">${p.name}</span><br><span class="sh-cat">${p.cat}</span></span>
         <span class="sh-price">${fmt(p.price)}</span></button>`).join('')
-    : '<p class="search-none">Rien trouvé — essayez « robe » ou « costume »…</p>';
+    : '<p class="search-none">Rien trouvé — essayez « robe », « ensemble », « costume »…</p>';
   $$('.search-hit').forEach(h=> h.addEventListener('click', ()=>{
     closeSearch();
     showView('catalog');
